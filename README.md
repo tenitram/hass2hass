@@ -4,3 +4,5 @@ My idea of making Home assistant available remotely with separation from local n
 Set of scripts that allow proxing Home assistant components from one instance into another via mqtt. This solution consists of the following pieces:
 - mqtt bridge configuration
 - Home assistant automation scripts
+
+Components that should be proxied, have to be added to hass2hass group. Currently only sensors and switches are supported.
