@@ -1,0 +1,18 @@
+alias: hass2hass - state proxy
+description: ""
+trigger:
+  - platform: event
+    event_type: state_changed
+condition:
+  - condition: template
+    value_template: >-
+      {{ trigger.event.data.entity_id in
+      state_attr('group.hass2hass','entity_id') }}
+action:
+  - service: mqtt.publish
+    data:
+      topic_template: >-
+        hass2hass/{{states[trigger.event.data.entity_id].domain}}/{{states[trigger.event.data.entity_id].object_id}}/state
+      payload_template: "{{ states(trigger.event.data.entity_id) }}"
+mode: parallel
+max: 10
