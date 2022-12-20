@@ -1,0 +1,36 @@
+alias: hass2hass - init
+description: ""
+trigger:
+  - platform: homeassistant
+    event: start
+condition: []
+action:
+  - repeat:
+      count: "{{ expand('group.hass2hass') | count }}"
+      sequence:
+        - service: mqtt.publish
+          data:
+            topic_template: >-
+              hass2hass/homeassistant/{{ expand('group.hass2hass')[repeat.index
+              - 1].domain }}/{{ expand('group.hass2hass')[repeat.index -
+              1].object_id }}{% if expand('group.hass2hass')[repeat.index -
+              1].attributes['device_class'] %}/{{
+              expand('group.hass2hass')[repeat.index -
+              1].attributes['device_class'] }}{% endif %}/config
+            payload_template: >-
+              {"name": "{{ expand('group.hass2hass')[repeat.index - 1].object_id
+              }}"{% if expand('group.hass2hass')[repeat.index -
+              1].attributes['device_class'] %}, "device_class": "{{
+              expand('group.hass2hass')[repeat.index -
+              1].attributes['device_class'] }}"{% endif %}, "state_topic": "{{
+              expand('group.hass2hass')[repeat.index - 1].domain }}/{{
+              expand('group.hass2hass')[repeat.index - 1].object_id }}/state"{%
+              if  expand('group.hass2hass')[repeat.index - 1].domain == 'switch'
+              %},"command_topic":"hass2hasscommand/{{
+              expand('group.hass2hass')[repeat.index - 1].domain }}/{{
+              expand('group.hass2hass')[repeat.index - 1].object_id
+              }}/set","payload_on":"on","payload_off":"off","state_on":"on","state_off":"off"{%
+              endif %}}
+            retain: true
+        - delay: 2
+mode: single
