@@ -6,3 +6,6 @@ Set of scripts that allow proxing Home assistant components from one instance in
 - Home assistant automation scripts
 
 Components that should be proxied, have to be added to hass2hass group. Currently only sensors and switches are supported.
+
+# MQTT bridge
+Local instance can have it's own mqtt broker and in such case it should contain bridge to external broker, that remote instance is connected to. Included bridge.conf file is working sample for local mosquitto that bridges remote cloudmqtt.
